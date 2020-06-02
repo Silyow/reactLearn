@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    class A {
+      constructor(name, color) {
+        this.name = name;
+        this.color = color;
+      }
+      // toString 是原型对象上的属性
+      toString(aaa) {
+        console.log(
+          "name:" + this.name + ",color:" + this.color + ",children:" + aaa
+        );
+      }
+      show() {
+        let xxx = 111;
+        console.log(xxx);
+      }
+    }
+
+    class B extends A {
+      constructor() {
+        super("cat", "white");
+      }
+      toString() {
+        super.toString("B");
+        super.show();
+      }
+    }
+
+    var cat = new B();
+    cat.toString();
+  </script>
+</html>
