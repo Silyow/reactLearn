@@ -34,6 +34,20 @@ function App() {
               <Mailbox unreadMessages={messages} />
             </div>
           </div>
+          <div className="block">
+            <p className="blockTitle">列表渲染/直接渲染</p>
+            <div className="blockComponent">
+              <ul>{listItems}</ul>
+            </div>
+          </div>
+          <div className="block">
+            <p className="blockTitle">列表渲染/列表组件渲染</p>
+            <div className="blockComponent">
+              <ul>
+                <ListItemsCom />
+              </ul>
+            </div>
+          </div>
         </div>
       </header>
     </div>
@@ -78,6 +92,7 @@ class ShowBox extends React.Component {
     return <div className="warning">显示状态!</div>;
   }
 }
+
 class ShowBlock extends React.Component {
   constructor(props) {
     super(props);
@@ -168,5 +183,27 @@ function Mailbox(props) {
     </div>
   );
 }
-
+//列表渲染 直接渲染
+const listArr = ["item1+索引", "item2+索引", "item3+索引"];
+const listItems = listArr.map((item, index) => {
+  return <li key={item}>{item + index}</li>;
+});
+//列表渲染 组件渲染
+class ListItemsCom extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      listArrCom: ["组件item1+索引", "组件item2+索引", "组件item3+索引"],
+      txt: "abcdefg",
+    };
+  }
+  componentDidMount() {}
+  componentWillUnmount() {}
+  render() {
+    const arr = this.state.listArrCom.map((item, index) => {
+      return <li key={item}>{item + index}</li>;
+    });
+    return <div>{this.state.listArrCom}</div>;
+  }
+}
 export default App;
