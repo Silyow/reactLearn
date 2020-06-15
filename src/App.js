@@ -96,6 +96,12 @@ function App() {
               <Calculator />
             </div>
           </div>
+          <div className="block">
+            <p className="blockTitle">组合继承</p>
+            <div className="blockComponent">
+              <WelcomeDialog />
+            </div>
+          </div>
         </div>
       </header>
     </div>
@@ -520,5 +526,21 @@ class Calculator extends React.Component {
     );
   }
 }
-//react变量提升
+//组合继承类似插槽
+function FancyBorder(props) {
+  return (
+    <div className={"FancyBorder FancyBorder-" + props.color}>
+      {props.children}
+    </div>
+  );
+}
+function WelcomeDialog() {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">Welcome</h1>
+      <p className="Dialog-message">Thank you for visiting our spacecraft!</p>
+    </FancyBorder>
+  );
+}
+
 export default App;
