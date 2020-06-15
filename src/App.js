@@ -49,6 +49,48 @@ function App() {
             </div>
           </div>
         </div>
+        <div className="blockBox">
+          <div className="block">
+            <p className="blockTitle">表单(注:react表单为单向数据流)</p>
+            <div className="blockComponent">
+              <InputCom />
+            </div>
+          </div>
+          <div className="block">
+            <p className="blockTitle">
+              textarea(textarea内容通过value属性控制)
+            </p>
+            <div className="blockComponent">
+              <TextareaCom />
+            </div>
+          </div>
+          <div className="block">
+            <p className="blockTitle">select(通过value属性展示选中文本)</p>
+            <div className="blockComponent">
+              <SelectCom />
+            </div>
+          </div>
+          <div className="block">
+            <p className="blockTitle">select(多选)</p>
+            <div className="blockComponent">
+              <SelectMuCom />
+            </div>
+          </div>
+        </div>
+        <div className="blockBox">
+          <div className="block">
+            <p className="blockTitle">change事件处理多个input表单</p>
+            <div className="blockComponent">
+              <Reservation />
+            </div>
+          </div>
+          <div className="block">
+            <p className="blockTitle">受控组件直接指定value将不可更改</p>
+            <div className="blockComponent">
+              <NoUpdata />
+            </div>
+          </div>
+        </div>
       </header>
     </div>
   );
@@ -203,7 +245,184 @@ class ListItemsCom extends React.Component {
     const arr = this.state.listArrCom.map((item, index) => {
       return <li key={item}>{item + index}</li>;
     });
-    return <div>{this.state.listArrCom}</div>;
+    return <div>{arr}</div>;
   }
 }
+//input表单实现双向数据绑定
+class InputCom extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      txt: "",
+    };
+    this.changeValue = this.changeValue.bind(this);
+  }
+  changeValue(e) {
+    this.setState({
+      txt: e.target.value,
+    });
+  }
+  render() {
+    return (
+      <div>
+        <p>当前文本: {this.state.txt}</p>
+        <input type="text" value={this.state.txt} onChange={this.changeValue} />
+      </div>
+    );
+  }
+}
+//textarea组件
+class TextareaCom extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      txt: "",
+    };
+    this.changeValue = this.changeValue.bind(this);
+  }
+  changeValue(e) {
+    this.setState({
+      txt: e.target.value,
+    });
+  }
+  render() {
+    return (
+      <div>
+        <textarea
+          maxLength="120"
+          value={this.state.txt}
+          onChange={this.changeValue}
+        ></textarea>
+      </div>
+    );
+  }
+}
+//select组件
+class SelectCom extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "mango",
+    };
+    this.changeValue = this.changeValue.bind(this);
+  }
+  changeValue(e) {
+    this.setState({
+      value: e.target.value,
+    });
+    alert("当前选中value为" + this.state.value);
+  }
+  render() {
+    return (
+      <select onChange={this.changeValue} value={this.state.value}>
+        <option value="grapefruit">葡萄柚</option>
+        <option value="lime">酸橙</option>
+        <option value="coconut">椰子</option>
+        <option value="mango">芒果</option>
+      </select>
+    );
+  }
+}
+//select多选
+class SelectMuCom extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectItem: [
+        { name: "葡萄柚", value: "grapefruit" },
+        { name: "酸橙", value: "lime" },
+        { name: "椰子", value: "coconut" },
+        { name: "芒果", value: "mango" },
+      ],
+      value: ["coconut", "mango"],
+    };
+    this.changeValue = this.changeValue.bind(this);
+  }
+  changeValue(e) {
+    this.setState({
+      value: e.target.value,
+    });
+    console.log(this.state.value);
+  }
+  render() {
+    const option = this.state.selectItem.map((item) => {
+      return (
+        <option value={item.value} key={item.value}>
+          {item.name}
+        </option>
+      );
+    });
+    return (
+      <select
+        multiple={true}
+        value={this.state.value}
+        onChange={this.changeValue}
+      >
+        {option}
+      </select>
+    );
+  }
+}
+//change事件控制多个input组件
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2,
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.name === "isGoing" ? target.checked : target.value;
+    const name = target.name;
+    if (name === "isGoing") {
+      alert("改变了check的值");
+    } else {
+      alert("改变了input的值");
+    }
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  render() {
+    return (
+      <form>
+        <p>多个input通过name属性控制值</p>
+        <label>
+          参与:
+          <input
+            name="isGoing"
+            type="checkbox"
+            checked={this.state.isGoing}
+            onChange={this.handleInputChange}
+          />
+        </label>
+        <br />
+        <label>
+          来宾人数:
+          <input
+            name="numberOfGuests"
+            type="number"
+            value={this.state.numberOfGuests}
+            onChange={this.handleInputChange}
+          />
+        </label>
+      </form>
+    );
+  }
+}
+//受控组件上直接指定value则不可更改(注:value不为空和undefined)
+function NoUpdata() {
+  return (
+    <div>
+      <input type="text" value="不能更改" />
+    </div>
+  );
+}
+//react变量提升
 export default App;
